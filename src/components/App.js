@@ -5,6 +5,7 @@ import PlantPage from "./PlantPage";
 function App() {
   const [plants, setPlants] = useState([])
   const [nameSearch, setNameSearch] = useState('')
+  const [onDelete, setOnDelete] = useState(0)
 
   useEffect(() => {
     fetch('http://localhost:6001/plants')
@@ -20,12 +21,18 @@ function App() {
     setNameSearch(searchValue)
   }
 
+  function handleDelete(id) {
+    setOnDelete(id)
+    const deletedPlants = plants.filter((plant) => plant.id !== id)
+    setPlants(deletedPlants)
+  }
+
   const filteredPlants = plants.filter((plant) => plant.name.toLowerCase().includes(nameSearch.toLowerCase()))
 
   return (
     <div className="app">
       <Header />
-      <PlantPage handleSearch={handleSearch} nameSearch={nameSearch} setNameSearch={setNameSearch} newPlantSubmit={newPlantSubmit} plants={filteredPlants}/>
+      <PlantPage onDelete={handleDelete} handleSearch={handleSearch} nameSearch={nameSearch} setNameSearch={setNameSearch} newPlantSubmit={newPlantSubmit} plants={filteredPlants}/>
     </div>
   );
 }
